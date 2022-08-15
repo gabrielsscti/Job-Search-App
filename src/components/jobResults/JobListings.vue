@@ -33,29 +33,17 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions, mapState } from "vuex";
 
+import { FETCH_JOBS } from "@/store";
 import JobListing from "@/components/jobResults/JobListing";
+
 export default {
   name: "JobListings",
   components: { JobListing },
-  data() {
-    return {
-      jobs: [],
-    };
-  },
 
   mounted() {
-    const baseUrl = process.env.VUE_APP_API_URL;
-
-    axios
-      .get(`${baseUrl}/jobs`)
-      .then((response) => {
-        this.jobs = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.FETCH_JOBS();
   },
 
   computed: {
@@ -79,6 +67,10 @@ export default {
       const lastJobIndex = firstJobIndex + 10;
       return this.jobs.slice(firstJobIndex, lastJobIndex);
     },
+    ...mapState(["jobs"]),
+  },
+  methods: {
+    ...mapActions([FETCH_JOBS]),
   },
 };
 </script>
